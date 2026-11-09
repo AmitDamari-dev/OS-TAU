@@ -1,0 +1,37 @@
+name: CI - Ubuntu 22.04 Build & Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential valgrind
+
+      - name: Build hw1shell
+        run: |
+          cd hw1/src
+          make clean
+          make
+
+      - name: Run automated test suite
+        run: |
+          cd hw1/tests
+          chmod +x run_tests.sh
+          ./run_tests.sh
+
+      - name: Verify submission packaging
+        run: |
+          cd hw1/scripts
+          chmod +x package_submission.sh
+          ./package_submission.sh 123456789 987654321
