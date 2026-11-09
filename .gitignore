@@ -1,0 +1,27 @@
+# Build artifacts
+*.o
+*.out
+*.exe
+hw1shell
+prog
+
+# Archives and packages
+*.tgz
+*.tar.gz
+*.zip
+hw1_*/
+
+# Valgrind and Debugger outputs
+vgcore.*
+core
+core.*
+valgrind-*.log
+valgrind-out.txt
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
