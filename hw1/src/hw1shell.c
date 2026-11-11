@@ -1,12 +1,7 @@
 /**
  * @file hw1shell.c
- * @brief Tel Aviv University - Operating Systems (0512.4402) - Homework 1
- *
- * Implementation of hw1shell: a lightweight, robust user-space shell.
- * Executes internal commands (cd, jobs, exit) and external binaries via fork/execvp.
- * Supports up to 4 concurrent background jobs (&) with non-blocking zombie reaping.
- *
- * Satisfies Guidelines 1 through 14 with 100% specification compliance.
+ * Simple shell: internal commands cd/jobs/exit, external commands via
+ * fork/execvp, and up to 4 concurrent background jobs.
  */
 
 #include "hw1shell.h"
@@ -47,14 +42,8 @@ void print_syscall_error(const char *syscall_name, int err) {
  * ARCHITECTURAL DESIGN NOTE (Assignment Prompt):
  * "think why cd has to be an internal and not external command"
  *
- * In Unix/Linux, each process maintains its own current working directory (CWD)
- * inside its kernel process control block (struct task_struct). When a process calls
- * fork(), the child process inherits a copy of the parent's file system context.
- * If 'cd' were an external program executed in a child process, the child would call
- * chdir(), changing only its own private working directory, and immediately exit.
- * The parent shell's working directory would remain completely unaffected.
- * Therefore, changing directory must be performed locally in the parent shell process.
- *
+ * cd must run inside the shell process itself: a child's chdir would only
+ * change the child's own working directory, not the shell's.
  * @param argc Token count of the command.
  * @param argv Argument vector (argv[0] == "cd").
  * @return 0 on success, -1 on syntax or chdir error.
