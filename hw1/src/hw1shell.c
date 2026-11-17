@@ -1,5 +1,9 @@
 /*
  * hw1shell.c - a simple shell.
+ *
+ * Operating Systems (0512.4402), Homework 1
+ * Authors: Ben Kishner (211696083), Amit Damari (326631249)
+ *
  * Internal commands: cd, jobs, exit. Everything else runs via fork/execvp.
  * Up to 4 background jobs (commands ending with &) at a time.
  */
@@ -129,8 +133,7 @@ int main(void) {
         }
 
         /* Keep the original text for the jobs listing; strtok modifies line */
-        strncpy(raw_cmd, line, sizeof(raw_cmd) - 1);
-        raw_cmd[sizeof(raw_cmd) - 1] = '\0';
+        snprintf(raw_cmd, sizeof(raw_cmd), "%s", line);
 
         /* Split into arguments by spaces and tabs */
         int argc = 0;
@@ -230,8 +233,7 @@ int main(void) {
             } else {
                 /* Background: remember it and report its pid */
                 bg_jobs[bg_slot].pid = pid;
-                strncpy(bg_jobs[bg_slot].cmd, raw_cmd, sizeof(bg_jobs[bg_slot].cmd) - 1);
-                bg_jobs[bg_slot].cmd[sizeof(bg_jobs[bg_slot].cmd) - 1] = '\0';
+                snprintf(bg_jobs[bg_slot].cmd, sizeof(bg_jobs[bg_slot].cmd), "%s", raw_cmd);
                 printf("hw1shell: pid %d started\n", (int)pid);
                 fflush(stdout);
             }
