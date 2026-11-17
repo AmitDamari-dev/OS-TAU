@@ -112,9 +112,9 @@ int main(void) {
     bg_job_t bg_jobs[MAX_BG_JOBS];
     memset(bg_jobs, 0, sizeof(bg_jobs));
 
-    char line[MAX_LINE_LEN + 1];
+    char line[MAX_LINE_LEN + 2];
     char raw_cmd[MAX_LINE_LEN + 1];
-    char *argv[MAX_ARGS + 1];
+    char *argv[MAX_ARGS + 3];
 
     /* Each iteration: prompt, read, parse, run, then reap finished bg jobs */
     while (1) {
@@ -133,12 +133,12 @@ int main(void) {
         }
 
         /* Keep the original text for the jobs listing; strtok modifies line */
-        snprintf(raw_cmd, sizeof(raw_cmd), "%s", line);
+        snprintf(raw_cmd, sizeof(raw_cmd), "%.*s", MAX_LINE_LEN, line);
 
         /* Split into arguments by spaces and tabs */
         int argc = 0;
         char *token = strtok(line, " \t");
-        while (token != NULL && argc < MAX_ARGS) {
+        while (token != NULL && argc < MAX_ARGS + 2) {
             argv[argc++] = token;
             token = strtok(NULL, " \t");
         }
